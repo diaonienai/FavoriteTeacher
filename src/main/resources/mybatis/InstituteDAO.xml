@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DAO.InstituteDAO">
+
+    <resultMap id="instituteResult" type="entity.Institute">
+        <id property="insNo" column="ins_no"/>
+        <result property="insName" column="ins_name"/>
+
+        <collection property="teachers" resultMap="DAO.TeacherDAO.teacherResult"/>
+    </resultMap>
+
+    <insert id="insertOne" parameterType="entity.Institute" useGeneratedKeys="true" keyProperty="insNo">
+        INSERT INTO institute(`ins_name`) VALUES (#{insName});
+    </insert>
+
+    <select id="queryByName" parameterType="String" resultMap="instituteResult">
+        select ins_no,ins_name FROM institute WHERE ins_name = #{_parameter};
+    </select>
+
+    
+
+</mapper>

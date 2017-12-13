@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DAO.TeacherDAO">
+
+    <resultMap id="teacherResult" type="entity.Teacher">
+        <id property="teacherNo" column="teacher_no"/>
+        <result property="teacherName" column="teacher_name"/>
+        <result property="gender" column="gender"/>
+        <result property="title" column="title"/>
+        <result property="latestUpdateTime" column="latest_update_time"/>
+        <result property="votes" column="votes"/>
+
+        <result property="introduction" column="introduction"/>
+        <result property="recommendation" column="recommendation"/>
+        <result property="comment" column="comment"/>
+
+        <association property="institute" resultMap="DAO.InstituteDAO.instituteResult"/>
+    </resultMap>
+    
+    <select id="getAllTeachers" resultMap="teacherResult">
+        SELECT
+            t.teacher_no,
+            t.teacher_name,
+            t.gender,
+            t.title,
+            t.latest_update_time,
+            t.votes,
+            i.ins_no,
+            i.ins_name
+        FROM teacher t
+            INNER JOIN institute i ON t.ins_no = i.ins_no;
+    </select>
+
+    <select id="getTeachersWithAllInfos" resultMap="teacherResult">
+        SELECT
+            t.teacher_no,
+            t.teacher_name,
+            t.gender,
+            t.title,
+            t.latest_update_time,
+            t.votes,
+            t.introduction,
+            t.recommendation,
+            t.comment,
+            i.ins_no,
+            i.ins_name
+        FROM teacher t
+            INNER JOIN institute i ON t.ins_no = i.ins_no;
+    </select>
+
+    <select id="getNumberOfTeachers" resultType="int">
+        select count(*) from teacher
+    </select>
+
+    <select id="getTeachersByPage" resultMap="teacherResult" parameterType="bean.Page">
+        SELECT
+            t.teacher_no,
+            t.teacher_name,
+            t.gender,
+            t.title,
+            t.latest_update_time,
+            t.votes,
+            i.ins_no,
+            i.ins_name
+        FROM teacher t
+            INNER JOIN institute i ON t.ins_no = i.ins_no
+        ORDER BY t.latest_update_time DESC LIMIT #{dbIndex}, #{dbNumber};
+    </select>
+
+    <insert id="insertOne" parameterType="entity.Teacher">
+        INSERT INTO teacher(
+            `teacher_name`,
+            `gender`,
+            `title`,
+            `introduction`,
+            `recommendation`,
+            `comment`,
+            `ins_no`
+        ) VALUES (
+            #{teacherName},
+            #{gender},
+            #{title},
+            #{introduction},
+            #{recommendation},
+            #{comment},
+            #{institute.insNo});
+    </insert>
+
+    <delete id="deleteBatch" parameterType="int[]">
+        DELETE FROM teacher WHERE teacher_no IN (
+        <foreach collection="array" item="item" separator=",">
+            #{item}
+        </foreach>
+        );
+    </delete>
+
+</mapper>
