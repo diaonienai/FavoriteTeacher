@@ -52,9 +52,9 @@
                     <textarea id="comment" name="comment" cols="120" rows="2"></textarea>
                     <br /><br />
                     <div class="center">
-                        <button name="cancel" id="cancel" class="btn btn-danger">取消</button>
+                        <button type="button" class="btn btn-danger" onclick="addTeacher.goToTeachers('<%=basePath%>')">取消</button>
                         <span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-                        <input type="submit" name="submit" id="submit" value="提交" class="btn btn-primary">
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary">
                     </div>
                 </form>
             </div>

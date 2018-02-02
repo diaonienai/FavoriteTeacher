@@ -50,7 +50,7 @@ var teachers = {
      * 跳转至添加页面
      */
     goToAddPage : function(basePath){
-        window.location.href = basePath+ teachers.addPageURL;
+        window.location.href = basePath + teachers.addPageURL;
     }
 
 };
