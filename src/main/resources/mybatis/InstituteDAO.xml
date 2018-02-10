@@ -6,6 +6,7 @@
     <resultMap id="instituteResult" type="entity.Institute">
         <id property="insNo" column="ins_no"/>
         <result property="insName" column="ins_name"/>
+        <result property="insVotes" column="ins_votes"/>
 
         <collection property="teachers" resultMap="DAO.TeacherDAO.teacherResult"/>
     </resultMap>
@@ -15,9 +16,17 @@
     </insert>
 
     <select id="queryByName" parameterType="String" resultMap="instituteResult">
-        select ins_no,ins_name FROM institute WHERE ins_name = #{_parameter};
+        select ins_no,ins_name,ins_votes FROM institute WHERE ins_name = #{_parameter};
     </select>
 
+    <select id="getAllInstitute" resultMap="instituteResult">
+        SELECT ins_no, ins_name, ins_votes FROM institute
+    </select>
+
+    <!--测试接口，后期删除-->
+    <update id="reset">
+        UPDATE institute SET ins_votes = 0
+    </update>
     
 
 </mapper>

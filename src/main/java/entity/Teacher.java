@@ -9,6 +9,8 @@ public class Teacher {
     private String teacherName;
     //性别
     private String gender;
+    //头像
+    private String icon;
     //职称
     private String title;
     //最新更新时间
@@ -112,6 +114,14 @@ public class Teacher {
         this.comment = comment;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -123,6 +133,9 @@ public class Teacher {
         sb.append(", ");
         sb.append("title: ");
         sb.append(title);
+        sb.append(", ");
+        sb.append("icon: ");
+        sb.append(icon);
         sb.append(", ");
         sb.append("votes: ");
         sb.append(votes);

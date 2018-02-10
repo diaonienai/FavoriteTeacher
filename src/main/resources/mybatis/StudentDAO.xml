@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DAO.StudentDAO">
+
+    <resultMap id="studentResult" type="entity.Student">
+        <id property="stuNo" column="stu_no"/>
+        <result property="stuPwd" column="stu_pwd"/>
+        <result property="stuName" column="stu_name"/>
+        <result property="voted" column="voted"/>
+
+    </resultMap>
+
+    <select id="getStudentById" parameterType="String" resultMap="studentResult">
+        SELECT stu_no, stu_pwd, stu_name, voted FROM student WHERE stu_no = #{_parameter}
+    </select>
+
+    <select id="getAllStudents" resultMap="studentResult">
+        SELECT stu_no, stu_pwd, stu_name, voted FROM student
+    </select>
+
+    <update id="setVoted">
+        UPDATE student SET voted = #{status} WHERE stu_no = #{id}
+    </update>
+
+    <select id="getStudentByIdAndPwd" resultMap="studentResult">
+        SELECT stu_no, stu_pwd, stu_name, voted FROM student
+        WHERE stu_no = #{id} AND stu_pwd = #{password}
+    </select>
+
+    <!--测试接口，后期删除-->
+    <update id="reset">
+        UPDATE student SET voted = 0
+    </update>
+</mapper>

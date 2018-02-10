@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DAO.VotesDAO">
+
+    <resultMap id="votesResult" type="entity.Votes">
+        <id property="voteNo" column="vote_no"/>
+        <result property="voteTime" column="vote_time"/>
+
+        <association property="teacher" resultMap="DAO.TeacherDAO.teacherResult"/>
+        <association property="student" resultMap="DAO.StudentDAO.studentResult"/>
+    </resultMap>
+
+    <insert id="insertOne" parameterType="entity.Votes" useGeneratedKeys="true" keyProperty="voteNo">
+        INSERT INTO votes(teacher_no, stu_no) VALUES (#{teacher.teacherNo},#{student.stuNo});
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO votes(teacher_no, stu_no) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.teacher.teacherNo},#{item.student.stuNo})
+        </foreach>
+    </insert>
+
+    <!--测试接口，后期删除-->
+    <delete id="reset">
+        DELETE FROM votes
+    </delete>
+
+</mapper>

@@ -25,11 +25,12 @@
                 <%--内容--%>
                 <form id="teachersForm" action="#" method="post">
                     <input type="hidden" name="currentPage" value="${page.currentPage}">
-                    <%--导师表格--%>
+                    <input type="hidden" name="editTeacherId">
+                <%--导师表格--%>
                     <table class="table table-hover">
                         <%--表格第一行,包括全选按钮,添加按钮,删除按钮--%>
                         <tr>
-                            <td><input type="checkbox" id="chooseAll" name="chooseAll" onclick="teachers.chooseAll(this)">
+                            <td><input type="checkbox" id="chooseAll" name="chooseAll" onclick="teachers.chx`ooseAll(this)">
                                 <label for="chooseAll">全选</label></td>
                             <td><input type="button" id="btnInsert" name="btnInsert" value="添加" onclick="teachers.goToAddPage('<%=basePath%>')"></td>
                             <td><input type="button" id="btnDelete" name="btnDelete" value="删除" onclick="teachers.delete('<%=basePath%>')"></td>
@@ -46,10 +47,10 @@
                         <c:forEach items="${teachers}" var="t">
                             <tr>
                                 <td><label><input type="checkbox" name="ids" value="${t.teacherNo}"></label></td>
-                                <td><img id="tImg" src="<%=request.getContextPath()%>/resources/image/test.png"></td>
+                                <td><img id="tImg" src="${t.icon}"></td>
                                 <td>${t.teacherName}</td>
                                 <td>${t.institute.insName}</td>
-                                <td><input type="button" value="编辑"></td>
+                                <td><input type="button" value="编辑" onclick="teachers.goToEdit('<%=basePath%>',${t.teacherNo})"></td>
                             </tr>
                         </c:forEach>
                     </table>

@@ -3,6 +3,7 @@ var teachers = {
     changePageURL : "admin/teachers",
     deleteURL : "admin/teachers/delete",
     addPageURL : "admin/teachers/addPage",
+    editPageURL : "admin/teachers/editPage",
 
     /**
      * 分页功能，根据页码跳转
@@ -51,6 +52,15 @@ var teachers = {
      */
     goToAddPage : function(basePath){
         window.location.href = basePath + teachers.addPageURL;
+    },
+
+    /**
+     * 跳转至编辑页面
+     */
+    goToEdit : function(basePath, teacherId){
+        $("#teachersForm").attr("action",basePath + teachers.editPageURL);
+        $("#teachersForm input[name='editTeacherId']").val(teacherId);
+        $("#teachersForm").submit();
     }
 
 };

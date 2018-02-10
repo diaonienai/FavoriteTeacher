@@ -8,6 +8,7 @@
         <result property="teacherName" column="teacher_name"/>
         <result property="gender" column="gender"/>
         <result property="title" column="title"/>
+        <result property="icon" column="icon"/>
         <result property="latestUpdateTime" column="latest_update_time"/>
         <result property="votes" column="votes"/>
 
@@ -24,6 +25,7 @@
             t.teacher_name,
             t.gender,
             t.title,
+            t.icon,
             t.latest_update_time,
             t.votes,
             i.ins_no,
@@ -38,6 +40,7 @@
             t.teacher_name,
             t.gender,
             t.title,
+            t.icon,
             t.latest_update_time,
             t.votes,
             t.introduction,
@@ -59,6 +62,7 @@
             t.teacher_name,
             t.gender,
             t.title,
+            t.icon,
             t.latest_update_time,
             t.votes,
             i.ins_no,
@@ -73,6 +77,7 @@
             `teacher_name`,
             `gender`,
             `title`,
+            `icon`,
             `introduction`,
             `recommendation`,
             `comment`,
@@ -81,6 +86,7 @@
             #{teacherName},
             #{gender},
             #{title},
+            #{icon},
             #{introduction},
             #{recommendation},
             #{comment},
@@ -94,5 +100,65 @@
         </foreach>
         );
     </delete>
+
+    <select id="getTeacherById" parameterType="int" resultMap="teacherResult">
+        SELECT
+            t.teacher_no,
+            t.teacher_name,
+            t.gender,
+            t.title,
+            t.icon,
+            t.introduction,
+            t.recommendation,
+            t.comment,
+            t.latest_update_time,
+            t.votes,
+            i.ins_no,
+            i.ins_name
+        FROM teacher t
+            INNER JOIN institute i ON t.ins_no = i.ins_no
+        WHERE t.teacher_no = #{_parameter}
+    </select>
+
+    <select id="getTeachersByIds" parameterType="int[]" resultMap="teacherResult">
+        SELECT
+        t.teacher_no,
+        t.teacher_name,
+        t.gender,
+        t.title,
+        t.icon,
+        t.introduction,
+        t.recommendation,
+        t.comment,
+        t.latest_update_time,
+        t.votes,
+        i.ins_no,
+        i.ins_name
+        FROM teacher t
+        INNER JOIN institute i ON t.ins_no = i.ins_no
+        WHERE t.teacher_no IN (
+        <foreach collection="array" item="item" separator=",">
+            #{item}
+        </foreach>
+        );
+    </select>
+
+    <update id="updateTeacher" parameterType="entity.Teacher">
+        UPDATE teacher t SET
+            t.teacher_name = #{teacherName},
+            t.gender = #{gender},
+            t.title = #{title},
+            t.icon = #{icon},
+            t.introduction = #{introduction},
+            t.recommendation = #{recommendation},
+            t.comment = #{comment},
+            t.ins_no = #{institute.insNo}
+        WHERE t.teacher_no = #{teacherNo}
+    </update>
+
+    <!--测试接口，后期删除-->
+    <update id="reset">
+        UPDATE teacher SET votes = 0
+    </update>
 
 </mapper>

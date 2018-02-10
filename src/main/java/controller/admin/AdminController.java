@@ -7,15 +7,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import service.TeacherService;
 import util.IConst;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -55,9 +57,21 @@ public class AdminController {
      * 添加导师接口
      */
     @RequestMapping(value = "/teachers/add", method = RequestMethod.POST)
-    public String add(Teacher teacher, Institute institute) {
+    public String add(Teacher teacher, Institute institute,
+                      @RequestParam("tIcon") CommonsMultipartFile multipartFile) {
+        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fileName = date + "."
+                + multipartFile.getContentType().split("/")[1];
+        String path = IConst.ICON_PATH + fileName;
+        System.out.println(path);
+        File file = new File(path);
+        try {
+            multipartFile.transferTo(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        teacher.setIcon(IConst.ICON_ADDRESS + fileName);
         int result = teacherService.insertOne(teacher, institute);
-        System.out.println("添加导师结果: " + result);
         return "redirect:/admin/teachers";
     }
 
@@ -65,10 +79,48 @@ public class AdminController {
      * 删除导师接口
      */
     @RequestMapping(value = "/teachers/delete", method = RequestMethod.POST)
-    public String deleteTeacher(int[] ids){
+    public String deleteTeacher(int[] ids) {
         teacherService.deleteBatch(ids);
         return "redirect:/admin/teachers";
 
+    }
+
+    /**
+     * 编辑导师页面
+     */
+    @RequestMapping(value = "/teachers/editPage", method = RequestMethod.POST)
+    public String editPage(Model model, int editTeacherId) {
+        Teacher teacher = teacherService.getTeacherById(editTeacherId);
+        model.addAttribute("teacher", teacher);
+        return "editTeacher";
+    }
+
+    /**
+     * 编辑导师接口
+     */
+    @RequestMapping(value = "/teachers/edit", method = RequestMethod.POST)
+    public String edit(Teacher teacher, Institute institute,
+                       @RequestParam("teacherIcon") String teacherIcon,
+                       @RequestParam("tIcon") CommonsMultipartFile multipartFile) {
+        String[] arr = teacherIcon.split("/");
+        File oldIcon = new File(IConst.ICON_PATH + arr[arr.length - 1]);
+        if (oldIcon.exists()) {
+            oldIcon.delete();
+        }
+        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fileName = date + "."
+                + multipartFile.getContentType().split("/")[1];
+        String path = IConst.ICON_PATH + fileName;
+        File file = new File(path);
+        try {
+            multipartFile.transferTo(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        teacher.setIcon(IConst.ICON_ADDRESS + fileName);
+        teacher.setInstitute(institute);
+        teacherService.updateTeacher(teacher);
+        return "redirect:/admin/teachers";
     }
 
     /**
@@ -78,6 +130,7 @@ public class AdminController {
     public String activity(Model model) {
         return "activity";
     }
+
 
     /**
      * 根据用户点击的tab跳转页面
@@ -95,9 +148,10 @@ public class AdminController {
     /**
      * test
      */
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public void test(){
-
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    @ResponseBody
+    public String test() {
+        return "llll";
     }
 
 }

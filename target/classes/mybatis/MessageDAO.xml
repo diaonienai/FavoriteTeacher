@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DAO.MessageDAO">
+
+    <resultMap id="messageResult" type="entity.Message">
+        <id property="messageNo" column="message_no"/>
+        <result property="content" column="content"/>
+        <result property="time" column="time"/>
+        <result property="anonymous" column="anonymous"/>
+
+        <association property="teacher" resultMap="DAO.TeacherDAO.teacherResult"/>
+        <association property="student" resultMap="DAO.StudentDAO.studentResult"/>
+
+    </resultMap>
+
+    <select id="getAllMessages" resultMap="messageResult">
+        SELECT
+            m.message_no,
+            m.content,
+            m.time,
+            m.anonymous,
+            t.teacher_no,
+            t.teacher_name,
+            s.stu_no,
+            s.stu_name
+        FROM message m
+            INNER JOIN teacher t ON m.teacher_no = t.teacher_no
+            INNER JOIN student s ON m.stu_no = s.stu_no
+        ORDER BY m.time DESC
+    </select>
+
+    <select id="getMsgOfTeacher" parameterType="int" resultMap="messageResult">
+        SELECT
+            m.message_no,
+            m.content,
+            m.time,
+            m.anonymous,
+            t.teacher_no,
+            t.teacher_name,
+            s.stu_no,
+            s.stu_name
+        FROM teacher t
+            INNER JOIN message m ON t.teacher_no = m.teacher_no
+            INNER JOIN student s ON m.stu_no = s.stu_no
+        WHERE t.teacher_no = #{_parameter}
+    </select>
+
+    <select id="getAllMsgByPage" parameterType="bean.Page" resultMap="messageResult">
+        SELECT
+            m.message_no,
+            m.content,
+            m.time,
+            m.anonymous,
+            t.teacher_no,
+            t.teacher_name,
+            s.stu_no,
+            s.stu_name
+        FROM message m
+            INNER JOIN teacher t ON m.teacher_no = t.teacher_no
+            INNER JOIN student s ON m.stu_no = s.stu_no
+        ORDER BY m.time DESC
+        LIMIT #{dbIndex}, #{dbNumber}
+    </select>
+
+    <select id="getNumOfAllMsg" resultType="int">
+        select count(*) FROM message
+    </select>
+
+    <select id="getMsgOfOneByPage" parameterType="bean.Page" resultMap="messageResult">
+        SELECT
+            m.message_no,
+            m.content,
+            m.time,
+            m.anonymous,
+            t.teacher_no,
+            t.teacher_name,
+            s.stu_no,
+            s.stu_name
+        FROM teacher t
+            INNER JOIN message m ON t.teacher_no = m.teacher_no
+            INNER JOIN student s ON m.stu_no = s.stu_no
+        WHERE t.teacher_no = #{tId}
+        ORDER BY m.time DESC
+        LIMIT #{page.dbIndex}, #{page.dbNumber}
+    </select>
+
+    <select id="getNumOfMsgOfOne" parameterType="int" resultType="int">
+        select count(*) FROM message WHERE teacher_no = #{_parameter}
+    </select>
+
+    <insert id="insertOne" parameterType="entity.Message">
+        INSERT IGNORE INTO message(content,teacher_no,stu_no,anonymous)
+        VALUES (#{content},#{teacher.teacherNo},#{student.stuNo},#{anonymous})
+    </insert>
+
+    <select id="getMsgByStuAndTeaId" resultMap="messageResult">
+        SELECT
+            m.message_no,
+            m.content,
+            m.time,
+            m.anonymous,
+            t.teacher_no,
+            t.teacher_name,
+            s.stu_no,
+            s.stu_name
+        FROM teacher t
+            INNER JOIN message m ON t.teacher_no = m.teacher_no
+            INNER JOIN student s ON m.stu_no = s.stu_no
+        WHERE m.teacher_no = #{tId} AND m.stu_no = #{sId}
+    </select>
+
+    <!--测试接口，后期删除-->
+    <delete id="reset">
+        DELETE FROM message
+    </delete>
+
+
+</mapper>

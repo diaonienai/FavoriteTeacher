@@ -23,4 +23,18 @@ public class InstituteService {
         return instituteDAO.insertOne(institute);
     }
 
+    /**
+     * 查询全部
+     */
+    public List<Institute> getAllInstitute() {
+        return instituteDAO.getAllInstitute();
+    }
+
+    /**
+     * 测试接口，后期删除
+     */
+    public boolean reset() {
+        return instituteDAO.reset() >= 0;
+    }
+
 }

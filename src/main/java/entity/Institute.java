@@ -8,6 +8,8 @@ public class Institute {
 
     private String insName;
 
+    private int insVotes;
+
     private List<Teacher> teachers;
 
     public Institute() {
@@ -36,6 +38,14 @@ public class Institute {
 
     public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
+    }
+
+    public int getInsVotes() {
+        return insVotes;
+    }
+
+    public void setInsVotes(int insVotes) {
+        this.insVotes = insVotes;
     }
 
     @Override

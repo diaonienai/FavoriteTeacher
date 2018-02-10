@@ -5,14 +5,17 @@ public class Page {
     //总条数
     private int totalNumber;
 
-    //总页数
-    private int totalPage;
+    //每页显示显示条数
+    private int numberInPage = 10;
 
     //当前页(从1开始算起)
     private int currentPage;
 
-    //每页显示显示条数
-    private int numberInPage = 2;
+    /**
+     * 有以上3个属性就可以计算下面的属性值
+     */
+    //总页数
+    private int totalPage;
 
     //数据库limit关键字的参数
     private int dbIndex;

@@ -38,4 +38,24 @@ public interface TeacherDAO {
      */
     int insertOne(Teacher teacher);
 
+    /**
+     * 单条查询
+     */
+    Teacher getTeacherById(int id);
+
+    /**
+     * 批量查询
+     */
+    List<Teacher> getTeachersByIds(int[] ids);
+
+    /**
+     * 更改
+     */
+    int updateTeacher(Teacher teacher);
+
+    /**
+     * 测试接口，后期删除，重置导师的投票
+     */
+    int reset();
+
 }

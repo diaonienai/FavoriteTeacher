@@ -9,7 +9,7 @@
         <module name="FavoriteTeacher" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="FavoriteTeacher" target="1.5" />
     </bytecodeTargetLevel>
   </component>
